@@ -14,6 +14,10 @@ import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import PageTransition from "./components/Layout/PageTransition";
 
+// Tool Pages
+import ImageCompress from "./pages/tools/ImageCompress";
+import ImageResize from "./pages/tools/ImageResize";
+
 // Initialize QueryClient outside of the component
 const queryClient = new QueryClient();
 const helmetContext = {}; // Create a context for the HelmetProvider
@@ -42,6 +46,12 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/image-tools" element={<ImageTools />} />
               <Route path="/pdf-tools" element={<PdfTools />} />
+              
+              {/* Image Tool Routes */}
+              <Route path="/image-tools/compress" element={<ImageCompress />} />
+              <Route path="/image-tools/resize" element={<ImageResize />} />
+              
+              {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </PageTransition>
