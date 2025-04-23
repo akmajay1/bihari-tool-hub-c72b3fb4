@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { language, globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -75,7 +76,7 @@ const Header: React.FC = () => {
               onClick={toggleLanguage}
               className="flex items-center gap-2 hover:bg-apple-blue/10"
             >
-              <globe className="h-4 w-4" />
+              <Globe className="h-4 w-4" />
               {language === 'en' ? 'हिंदी' : 'English'}
             </Button>
           </div>
@@ -138,7 +139,7 @@ const Header: React.FC = () => {
                   onClick={toggleLanguage}
                   className="w-full justify-start"
                 >
-                  <globe className="h-4 w-4 mr-2" />
+                  <Globe className="h-4 w-4 mr-2" />
                   {language === 'en' ? 'हिंदी' : 'English'}
                 </Button>
               </li>
