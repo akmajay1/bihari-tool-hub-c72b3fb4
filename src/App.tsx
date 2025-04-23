@@ -1,10 +1,18 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import Index from "./pages/Index";
+import ImageTools from "./pages/ImageTools";
+import PdfTools from "./pages/PdfTools";
 import NotFound from "./pages/NotFound";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
+import PageTransition from "./components/Layout/PageTransition";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +22,27 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Helmet>
+          <meta name="description" content="BihariTool - Free online tools for image editing and PDF manipulation" />
+          <meta name="keywords" content="image tools, pdf tools, compress image, remove background, merge pdf, image to pdf" />
+          <meta name="author" content="BihariTool" />
+          <meta property="og:title" content="BihariTool - Free Online Image and PDF Tools" />
+          <meta property="og:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="BihariTool - Free Online Image and PDF Tools" />
+          <meta name="twitter:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
+        </Helmet>
+        <Header />
+        <PageTransition>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/image-tools" element={<ImageTools />} />
+            <Route path="/pdf-tools" element={<PdfTools />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </PageTransition>
+        <Footer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
