@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +20,7 @@ import ImageResize from "./pages/tools/ImageResize";
 import ImageChangeBackground from "./pages/tools/ImageChangeBackground";
 import ImageRemoveBackground from "./pages/tools/ImageRemoveBackground";
 import ImageAddNameDate from "./pages/tools/ImageAddNameDate";
+import ImageToPdf from "./pages/tools/ImageToPdf";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -58,6 +58,7 @@ const App = () => {
                 <Route path="/image-tools/change-background" element={<ImageChangeBackground />} />
                 <Route path="/image-tools/remove-background" element={<ImageRemoveBackground />} />
                 <Route path="/image-tools/add-name-date" element={<ImageAddNameDate />} />
+                <Route path="/image-tools/to-pdf" element={<ImageToPdf />} />
                 
                 {/* 404 Route */}
                 <Route path="*" element={<NotFound />} />
