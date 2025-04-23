@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +22,11 @@ import ImageChangeBackground from "./pages/tools/ImageChangeBackground";
 import ImageRemoveBackground from "./pages/tools/ImageRemoveBackground";
 import ImageAddNameDate from "./pages/tools/ImageAddNameDate";
 import ImageToPdf from "./pages/tools/ImageToPdf";
+import ImageConvert from "./pages/tools/ImageConvert";
+import QrGenerator from "./pages/tools/QrGenerator";
+import FaceBlur from "./pages/tools/FaceBlur";
+import ImageEnhance from "./pages/tools/ImageEnhance";
+import PhotoSignJoiner from "./pages/tools/PhotoSignJoiner";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -59,6 +65,11 @@ const App = () => {
                 <Route path="/image-tools/remove-background" element={<ImageRemoveBackground />} />
                 <Route path="/image-tools/add-name-date" element={<ImageAddNameDate />} />
                 <Route path="/image-tools/to-pdf" element={<ImageToPdf />} />
+                <Route path="/image-tools/convert" element={<ImageConvert />} />
+                <Route path="/image-tools/qr-generator" element={<QrGenerator />} />
+                <Route path="/image-tools/face-blur" element={<FaceBlur />} />
+                <Route path="/image-tools/enhance" element={<ImageEnhance />} />
+                <Route path="/image-tools/photo-sign-joiner" element={<PhotoSignJoiner />} />
                 
                 {/* 404 Route */}
                 <Route path="*" element={<NotFound />} />
