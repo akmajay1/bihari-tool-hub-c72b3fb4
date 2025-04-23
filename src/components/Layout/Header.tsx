@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -31,9 +31,9 @@ const Header: React.FC = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Image Tools', path: '/image-tools' },
-    { name: 'PDF Tools', path: '/pdf-tools' }
+    { name: t('home'), path: '/' },
+    { name: t('imageTools'), path: '/image-tools' },
+    { name: t('pdfTools'), path: '/pdf-tools' }
   ];
 
   return (
