@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, X } from 'lucide-react';
@@ -14,6 +13,7 @@ interface FileUploaderProps {
   selectedFile?: File | null;
   onClearFile?: () => void;
   uploadProgress?: number;
+  multiple?: boolean;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
@@ -24,7 +24,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   allowMultiple = false,
   selectedFile = null,
   onClearFile,
-  uploadProgress
+  uploadProgress,
+  multiple = false
 }) => {
   const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
@@ -110,7 +111,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                 className="hidden"
                 onChange={handleFileChange}
                 accept={acceptedFileTypes}
-                multiple={allowMultiple}
+                multiple={multiple}
               />
             </label>
             <p className="text-apple-darkgray text-sm mt-4">
