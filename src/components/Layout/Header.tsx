@@ -1,9 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/LanguageContext';
+import { Button } from '@/components/ui/button';
+import { language, globe } from 'lucide-react';
 
 const Header: React.FC = () => {
+  const { language, toggleLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -23,7 +26,6 @@ const Header: React.FC = () => {
   }, [scrolled]);
 
   useEffect(() => {
-    // Close mobile menu when changing routes
     setMenuOpen(false);
   }, [location.pathname]);
 
@@ -36,34 +38,47 @@ const Header: React.FC = () => {
   return (
     <header
       className={cn(
-        'fixed w-full z-50 transition-all duration-300',
-        scrolled ? 'bg-white shadow-sm py-3' : 'bg-transparent py-5'
+        'fixed w-full z-50 transition-all duration-300 backdrop-blur-sm',
+        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-transparent py-5'
       )}
     >
       <div className="app-container">
         <nav className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-apple-black">BihariTool</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-apple-blue to-purple-600 bg-clip-text text-transparent">
+              BihariTool
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-8">
-            {navLinks.map((link) => (
-              <li key={link.path}>
-                <Link
-                  to={link.path}
-                  className={cn(
-                    'text-sm font-medium transition-colors duration-200',
-                    location.pathname === link.path
-                      ? 'text-apple-blue'
-                      : 'text-apple-black hover:text-apple-blue'
-                  )}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="hidden md:flex items-center space-x-8">
+            <ul className="flex space-x-8">
+              {navLinks.map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className={cn(
+                      'text-sm font-medium transition-colors duration-200 hover:text-apple-blue relative after:content-[""] after:absolute after:w-full after:h-0.5 after:bg-apple-blue after:left-0 after:-bottom-1 after:scale-x-0 after:origin-right after:transition-transform hover:after:scale-x-100 hover:after:origin-left',
+                      location.pathname === link.path
+                        ? 'text-apple-blue after:scale-x-100'
+                        : 'text-apple-black'
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 hover:bg-apple-blue/10"
+            >
+              <globe className="h-4 w-4" />
+              {language === 'en' ? 'हिंदी' : 'English'}
+            </Button>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -106,7 +121,7 @@ const Header: React.FC = () => {
                   <Link
                     to={link.path}
                     className={cn(
-                      'block text-base py-2',
+                      'block text-base py-2 transition-colors duration-200',
                       location.pathname === link.path
                         ? 'text-apple-blue font-medium'
                         : 'text-apple-black hover:text-apple-blue'
@@ -116,6 +131,17 @@ const Header: React.FC = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleLanguage}
+                  className="w-full justify-start"
+                >
+                  <globe className="h-4 w-4 mr-2" />
+                  {language === 'en' ? 'हिंदी' : 'English'}
+                </Button>
+              </li>
             </ul>
           </div>
         )}
