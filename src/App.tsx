@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import Index from "./pages/Index";
 import ImageTools from "./pages/ImageTools";
@@ -16,37 +16,40 @@ import PageTransition from "./components/Layout/PageTransition";
 
 // Initialize QueryClient outside of the component
 const queryClient = new QueryClient();
+const helmetContext = {}; // Create a context for the HelmetProvider
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Helmet>
-          <meta name="description" content="BihariTool - Free online tools for image editing and PDF manipulation" />
-          <meta name="keywords" content="image tools, pdf tools, compress image, remove background, merge pdf, image to pdf" />
-          <meta name="author" content="BihariTool" />
-          <meta property="og:title" content="BihariTool - Free Online Image and PDF Tools" />
-          <meta property="og:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
-          <meta property="og:type" content="website" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="BihariTool - Free Online Image and PDF Tools" />
-          <meta name="twitter:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
-        </Helmet>
-        <Header />
-        <PageTransition>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/image-tools" element={<ImageTools />} />
-            <Route path="/pdf-tools" element={<PdfTools />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </PageTransition>
-        <Footer />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider context={helmetContext}>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Helmet>
+            <meta name="description" content="BihariTool - Free online tools for image editing and PDF manipulation" />
+            <meta name="keywords" content="image tools, pdf tools, compress image, remove background, merge pdf, image to pdf" />
+            <meta name="author" content="BihariTool" />
+            <meta property="og:title" content="BihariTool - Free Online Image and PDF Tools" />
+            <meta property="og:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
+            <meta property="og:type" content="website" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="BihariTool - Free Online Image and PDF Tools" />
+            <meta name="twitter:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
+          </Helmet>
+          <Header />
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/image-tools" element={<ImageTools />} />
+              <Route path="/pdf-tools" element={<PdfTools />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </PageTransition>
+          <Footer />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;
