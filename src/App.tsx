@@ -18,6 +18,9 @@ import PageTransition from "./components/Layout/PageTransition";
 // Tool Pages
 import ImageCompress from "./pages/tools/ImageCompress";
 import ImageResize from "./pages/tools/ImageResize";
+import ImageChangeBackground from "./pages/tools/ImageChangeBackground";
+import ImageRemoveBackground from "./pages/tools/ImageRemoveBackground";
+import ImageAddNameDate from "./pages/tools/ImageAddNameDate";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -52,6 +55,9 @@ const App = () => {
                 {/* Image Tool Routes */}
                 <Route path="/image-tools/compress" element={<ImageCompress />} />
                 <Route path="/image-tools/resize" element={<ImageResize />} />
+                <Route path="/image-tools/change-background" element={<ImageChangeBackground />} />
+                <Route path="/image-tools/remove-background" element={<ImageRemoveBackground />} />
+                <Route path="/image-tools/add-name-date" element={<ImageAddNameDate />} />
                 
                 {/* 404 Route */}
                 <Route path="*" element={<NotFound />} />
