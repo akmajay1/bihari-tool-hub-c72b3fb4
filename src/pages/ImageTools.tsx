@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ToolCard from '../components/UI/ToolCard';
 import LoadingSkeleton from '../components/UI/LoadingSkeleton';
+import { Helmet } from 'react-helmet-async';
 
 import {
   Image,
@@ -23,12 +23,10 @@ const ImageTools = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Simulate loading delay for skeleton effect
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 800);
 
-    // Update meta tags for SEO
     document.title = "Image Tools - BihariTool";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -119,49 +117,33 @@ const ImageTools = () => {
   ];
 
   return (
-    <div className="pt-24 pb-16 fade-in">
-      <div className="app-container">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Image Tools</h1>
-          <p className="text-apple-darkgray max-w-2xl mx-auto">
-            Free online tools to edit, convert, and enhance your images. 
-            No registration required, process files instantly.
-          </p>
-        </div>
+    <>
+      <Helmet>
+        <meta name="description" content="Free online image editing tools - compress, resize, convert, remove background, and more." />
+        <meta name="keywords" content="image tools, image editing, compress image, remove background, resize image" />
+      </Helmet>
+
+      <div className="app-container py-12 md:py-16">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-2">Image Tools</h1>
+        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          Professional image editing tools to enhance, convert, and modify your images. No signup required.
+        </p>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array(6).fill(0).map((_, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array(8).fill(0).map((_, index) => (
               <LoadingSkeleton key={index} className="h-36" />
             ))}
           </div>
         ) : (
-          <>
-            {/* Popular tools section */}
-            <div className="mb-12">
-              <h2 className="text-xl font-medium mb-6 text-apple-darkgray">Popular Tools</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tools
-                  .filter(tool => tool.popular)
-                  .map((tool, index) => (
-                    <ToolCard key={index} {...tool} />
-                  ))}
-              </div>
-            </div>
-
-            {/* All tools section */}
-            <div>
-              <h2 className="text-xl font-medium mb-6 text-apple-darkgray">All Image Tools</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tools.map((tool, index) => (
-                  <ToolCard key={`all-${index}`} {...tool} />
-                ))}
-              </div>
-            </div>
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {tools.map((tool, index) => (
+              <ToolCard key={index} {...tool} />
+            ))}
+          </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

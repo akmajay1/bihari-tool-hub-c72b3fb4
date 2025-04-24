@@ -48,8 +48,8 @@ const Header: React.FC = () => {
       <div className="app-container">
         <nav className="flex items-center justify-between">
           <Link to="/" className="flex items-center z-10">
-            <span className="text-2xl font-bold text-apple-blue drop-shadow-sm">
-              <AnimatedText text="BihariTool" delay={300} letterDelay={80} />
+            <span className="text-2xl font-bold text-apple-blue drop-shadow-sm bg-white/80 px-2 py-1 rounded">
+              <AnimatedText text="BihariTool" delay={0} letterDelay={50} />
             </span>
           </Link>
 
