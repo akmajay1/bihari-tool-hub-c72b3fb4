@@ -7,9 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import FileUploader from '@/components/UI/FileUploader';
 import { formatFileSize } from '@/utils/imageUtils';
-import { pdfjsLib } from 'pdfjs-dist';
+import * as pdfjs from 'pdfjs-dist';
 
-// We'll use this as a placeholder since full PDF rendering will require additional setup
+// Initialize PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
 const PdfToImage = () => {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -32,23 +34,50 @@ const PdfToImage = () => {
     }
 
     setIsProcessing(true);
+    setResultImages([]);
     
     try {
-      // This is a simplified version - in a real implementation we would use PDF.js
-      // to render PDF pages to canvas and then export them as images
-      toast.success('PDF pages extracted successfully!');
+      // Read the file as ArrayBuffer
+      const arrayBuffer = await pdfFile.arrayBuffer();
       
-      // Simulate result with placeholder images
-      setTimeout(() => {
-        setResultImages([
-          'https://via.placeholder.com/800x1000?text=Page+1',
-          'https://via.placeholder.com/800x1000?text=Page+2'
-        ]);
-        setIsProcessing(false);
-      }, 2000);
+      // Load the PDF document
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      
+      const totalPages = pdf.numPages;
+      const imagePromises = [];
+      
+      // Process each page
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1.5 });
+        
+        // Create canvas for rendering
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        
+        // Render PDF page to canvas
+        const renderContext = {
+          canvasContext: context!,
+          viewport: viewport
+        };
+        
+        await page.render(renderContext).promise;
+        
+        // Convert canvas to image data URL
+        const imageDataUrl = canvas.toDataURL('image/png');
+        imagePromises.push(imageDataUrl);
+      }
+      
+      // Set the result images
+      setResultImages(imagePromises);
+      toast.success(`Successfully converted ${totalPages} page${totalPages > 1 ? 's' : ''} to images!`);
     } catch (error) {
       console.error('Error converting PDF to images:', error);
       toast.error('Failed to convert PDF. Please try again.');
+    } finally {
       setIsProcessing(false);
     }
   };
@@ -60,6 +89,15 @@ const PdfToImage = () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  };
+
+  const downloadAllImages = () => {
+    resultImages.forEach((url, index) => {
+      setTimeout(() => {
+        downloadImage(url, index);
+      }, index * 100); // Add a small delay between downloads
+    });
+    toast.success('Downloading all images...');
   };
 
   return (
@@ -109,6 +147,17 @@ const PdfToImage = () => {
           
           {resultImages.length > 0 ? (
             <div className="space-y-4">
+              <div className="flex justify-between items-center mb-4">
+                <span className="font-medium">{resultImages.length} page{resultImages.length > 1 ? 's' : ''} extracted</span>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  onClick={downloadAllImages}
+                >
+                  <Download className="h-4 w-4 mr-1" /> Download All
+                </Button>
+              </div>
+              
               {resultImages.map((img, index) => (
                 <div key={index} className="border rounded-lg p-3 bg-white">
                   <div className="flex justify-between items-center mb-2">
