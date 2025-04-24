@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -43,19 +42,17 @@ const Header: React.FC = () => {
     <header
       className={cn(
         'fixed w-full z-50 transition-all duration-300 backdrop-blur-lg border-b',
-        scrolled ? 'bg-white/90 shadow-sm py-3' : 'bg-white/80 py-5',
-        'before:absolute before:inset-0 before:z-[-1] before:backdrop-blur-xl before:backdrop-saturate-150'
+        scrolled ? 'bg-white/90 shadow-sm py-3' : 'bg-white/95 py-5'
       )}
     >
       <div className="app-container">
         <nav className="flex items-center justify-between">
           <Link to="/" className="flex items-center z-10">
-            <span className="text-2xl font-bold bg-gradient-to-r from-apple-blue to-purple-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold text-apple-blue drop-shadow-sm">
               <AnimatedText text="BihariTool" delay={300} letterDelay={80} />
             </span>
           </Link>
 
-          {/* Desktop Navigation with improved styling */}
           <div className="hidden md:flex items-center space-x-8">
             <ul className="flex space-x-8">
               {navLinks.map((link) => (
@@ -85,7 +82,6 @@ const Header: React.FC = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button with improved contrast */}
           <button
             className="md:hidden text-apple-black z-10 bg-white/80 p-2 rounded-lg"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -117,7 +113,6 @@ const Header: React.FC = () => {
           </button>
         </nav>
 
-        {/* Mobile Menu with improved styling */}
         {menuOpen && (
           <div className="md:hidden mt-3 pb-3 border-t border-gray-200 bg-white/95 backdrop-blur-lg animate-fade-in rounded-b-lg shadow-md">
             <ul className="space-y-4 mt-4">

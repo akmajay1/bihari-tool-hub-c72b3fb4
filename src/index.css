@@ -107,7 +107,6 @@
   }
 }
 
-/* Adding enhanced bubble animations */
 @keyframes float {
   0% {
     bottom: -100px;
@@ -141,7 +140,6 @@
   animation: float 15s linear infinite;
 }
 
-/* Apple-like UI enhancements */
 .glass-effect {
   backdrop-filter: blur(15px);
   background-color: rgba(255, 255, 255, 0.7);

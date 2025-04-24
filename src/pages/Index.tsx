@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AnimatedText from '../components/UI/AnimatedText';
@@ -6,7 +5,6 @@ import ToolCard from '../components/UI/ToolCard';
 import LoadingScreen from '../components/Layout/LoadingScreen';
 import { useLanguage } from '../context/LanguageContext';
 
-// Import some icons from lucide-react for our tools
 import { 
   Image, 
   FileImage, 
@@ -26,7 +24,6 @@ const Index = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
-    // Only show loading screen on first page load
     const hasSeenLoading = sessionStorage.getItem('hasSeenLoading');
     if (hasSeenLoading) {
       setShowLoading(false);
@@ -34,7 +31,6 @@ const Index = () => {
       sessionStorage.setItem('hasSeenLoading', 'true');
     }
     
-    // Update meta tags for SEO
     document.title = "BihariTool - Free Online Image and PDF Tools";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -74,20 +70,22 @@ const Index = () => {
       title: "Merge PDF",
       description: "Combine multiple PDFs into one document",
       icon: <Combine size={24} />,
-      to: "/pdf-tools/merge",
+      to: "/pdf-tools/merge-pdf",
       popular: true
     },
     {
       title: "Image to PDF",
       description: "Convert images to PDF format easily",
       icon: <ImageDown size={24} />,
-      to: "/pdf-tools/image-to-pdf"
+      to: "/pdf-tools/image-to-pdf",
+      popular: true
     },
     {
       title: "Split PDF",
       description: "Divide your PDF into multiple files",
       icon: <Scissors size={24} />,
-      to: "/pdf-tools/split"
+      to: "/pdf-tools/split-pdf",
+      popular: true
     }
   ];
 
@@ -96,7 +94,6 @@ const Index = () => {
       {showLoading && <LoadingScreen onFinish={handleFinishLoading} />}
       
       <div className="fade-in">
-        {/* Hero Section */}
         <section className="relative bg-gradient-to-b from-white to-apple-gray py-32 md:py-36">
           <div className="app-container text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-apple-black mb-6">
@@ -117,46 +114,20 @@ const Index = () => {
           <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
-        {/* Featured Tools Section */}
         <section className="py-16">
           <div className="app-container">
             <h2 className="text-3xl font-bold text-center mb-12">{t('popularTools')}</h2>
             
-            <div className="mb-16">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-2xl font-medium flex items-center">
-                  <Image className="mr-2" size={24} /> {t('imageTools')}
-                </h3>
-                <Link to="/image-tools" className="text-apple-blue hover:underline">
-                  {t('viewAllImageTools')}
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {imageTools.map((tool, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...imageTools, ...pdfTools]
+                .filter(tool => tool.popular)
+                .map((tool, index) => (
                   <ToolCard key={index} {...tool} />
                 ))}
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-2xl font-medium flex items-center">
-                  <FileText className="mr-2" size={24} /> {t('pdfTools')}
-                </h3>
-                <Link to="/pdf-tools" className="text-apple-blue hover:underline">
-                  {t('viewAllPdfTools')}
-                </Link>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {pdfTools.map((tool, index) => (
-                  <ToolCard key={index} {...tool} />
-                ))}
-              </div>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="py-16 bg-apple-gray">
           <div className="app-container">
             <h2 className="text-3xl font-bold text-center mb-12">{t('whyChoose')}</h2>
@@ -198,7 +169,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Call to Action */}
         <section className="py-20">
           <div className="app-container text-center">
             <h2 className="text-3xl font-bold mb-6">{t('readyToTransform')}</h2>
