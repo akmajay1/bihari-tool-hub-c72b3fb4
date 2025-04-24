@@ -42,19 +42,20 @@ const Header: React.FC = () => {
   return (
     <header
       className={cn(
-        'fixed w-full z-50 transition-all duration-300 backdrop-blur-lg',
-        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-white/70 py-5' // Improved background for mobile
+        'fixed w-full z-50 transition-all duration-300 backdrop-blur-lg border-b',
+        scrolled ? 'bg-white/90 shadow-sm py-3' : 'bg-white/80 py-5',
+        'before:absolute before:inset-0 before:z-[-1] before:backdrop-blur-xl before:backdrop-saturate-150'
       )}
     >
       <div className="app-container">
         <nav className="flex items-center justify-between">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center z-10">
             <span className="text-2xl font-bold bg-gradient-to-r from-apple-blue to-purple-600 bg-clip-text text-transparent">
               <AnimatedText text="BihariTool" delay={300} letterDelay={80} />
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation with improved styling */}
           <div className="hidden md:flex items-center space-x-8">
             <ul className="flex space-x-8">
               {navLinks.map((link) => (
@@ -84,9 +85,9 @@ const Header: React.FC = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button with improved contrast */}
           <button
-            className="md:hidden text-apple-black"
+            className="md:hidden text-apple-black z-10 bg-white/80 p-2 rounded-lg"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle Menu"
           >
@@ -116,7 +117,7 @@ const Header: React.FC = () => {
           </button>
         </nav>
 
-        {/* Mobile Menu with improved background */}
+        {/* Mobile Menu with improved styling */}
         {menuOpen && (
           <div className="md:hidden mt-3 pb-3 border-t border-gray-200 bg-white/95 backdrop-blur-lg animate-fade-in rounded-b-lg shadow-md">
             <ul className="space-y-4 mt-4">
@@ -125,22 +126,26 @@ const Header: React.FC = () => {
                   <Link
                     to={link.path}
                     className={cn(
-                      'block text-base py-2 transition-colors duration-200 px-4',
+                      'block text-base py-2 px-4 transition-colors duration-200',
                       location.pathname === link.path
-                        ? 'text-apple-blue font-medium'
-                        : 'text-apple-black hover:text-apple-blue'
+                        ? 'text-apple-blue font-medium bg-apple-blue/5'
+                        : 'text-apple-black hover:text-apple-blue hover:bg-apple-blue/5'
                     )}
+                    onClick={() => setMenuOpen(false)}
                   >
                     {link.name}
                   </Link>
                 </li>
               ))}
-              <li>
+              <li className="px-4">
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={toggleLanguage}
-                  className="w-full justify-start px-4"
+                  onClick={() => {
+                    toggleLanguage();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full justify-start"
                 >
                   <Globe className="h-4 w-4 mr-2" />
                   {language === 'en' ? 'हिंदी' : 'English'}

@@ -11,44 +11,43 @@ const BubbleAnimation: React.FC = () => {
     // Create bubbles
     const createBubble = () => {
       const bubble = document.createElement('div');
-      bubble.className = 'absolute rounded-full bg-white/10 backdrop-blur-sm border border-white/20 animate-float';
+      bubble.className = 'absolute rounded-full bg-white/5 backdrop-blur-sm border border-white/10 animate-float';
       
-      // Random size between 30px and 120px
-      const size = Math.random() * 90 + 30;
+      // Random size between 20px and 100px
+      const size = Math.random() * 80 + 20;
       bubble.style.width = `${size}px`;
       bubble.style.height = `${size}px`;
       
-      // Random horizontal position
+      // Random horizontal position across full width
       const posX = Math.random() * 100;
       bubble.style.left = `${posX}%`;
       
       // Start below the viewport
       bubble.style.bottom = `-${size}px`;
       
-      // Zigzag animation
-      const zigzagAmount = Math.random() * 40 - 20; // between -20% and 20%
-      bubble.style.animation = `float ${Math.random() * 8 + 12}s linear infinite, zigzag ${Math.random() * 5 + 5}s ease-in-out infinite alternate`;
+      // Enhanced zigzag animation
+      const zigzagAmount = Math.random() * 60 - 30; // between -30% and 30%
+      bubble.style.animation = `float ${Math.random() * 10 + 8}s linear infinite, zigzag ${Math.random() * 4 + 3}s ease-in-out infinite alternate`;
       bubble.style.animationDelay = `${Math.random() * 5}s`;
       bubble.style.transform = `translateX(${zigzagAmount}%)`;
       
-      // Append bubble to container
       container.appendChild(bubble);
       
-      // Remove bubble after animation completes
+      // Remove bubble after animation
       setTimeout(() => {
         if (container.contains(bubble)) {
           container.removeChild(bubble);
         }
-      }, 20000);
+      }, 18000);
     };
 
-    // Create initial set of bubbles
-    for (let i = 0; i < 10; i++) {
-      setTimeout(createBubble, i * 1000);
+    // Create initial set of bubbles (more bubbles)
+    for (let i = 0; i < 20; i++) {
+      setTimeout(createBubble, i * 500);
     }
 
-    // Create new bubbles periodically
-    const interval = setInterval(createBubble, 3000);
+    // Create new bubbles more frequently
+    const interval = setInterval(createBubble, 1500);
 
     return () => {
       clearInterval(interval);
