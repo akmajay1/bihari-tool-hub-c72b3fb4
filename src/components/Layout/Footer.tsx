@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-apple-gray py-12 mt-20">
+    <footer className="bg-apple-gray py-12 mt-20 relative">
       <div className="app-container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -51,7 +52,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/pdf-tools/merge" className="text-apple-darkgray text-sm hover:text-apple-blue transition-colors">
+                <Link to="/pdf-tools/merge-pdf" className="text-apple-darkgray text-sm hover:text-apple-blue transition-colors">
                   Merge PDFs
                 </Link>
               </li>
@@ -61,7 +62,10 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-gray-200 mt-8 pt-8 text-center">
           <p className="text-apple-darkgray text-sm">
-            © {currentYear} BihariTool. All rights reserved.
+            © {currentYear} BihariTool. All rights reserved by Akhilesh Kumar Singh under company name Akma.
+          </p>
+          <p className="text-apple-darkgray text-sm mt-2 flex items-center justify-center">
+            Made with <Heart className="h-4 w-4 mx-1 text-red-500 fill-red-500" /> in Darbhanga
           </p>
         </div>
       </div>

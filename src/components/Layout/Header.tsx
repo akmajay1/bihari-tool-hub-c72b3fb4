@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
+import AnimatedText from '@/components/UI/AnimatedText';
 
 const Header: React.FC = () => {
   const { language, toggleLanguage, t } = useLanguage();
@@ -41,15 +42,15 @@ const Header: React.FC = () => {
   return (
     <header
       className={cn(
-        'fixed w-full z-50 transition-all duration-300 backdrop-blur-sm',
-        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-white/60 py-5' // Improved background for mobile
+        'fixed w-full z-50 transition-all duration-300 backdrop-blur-lg',
+        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-white/70 py-5' // Improved background for mobile
       )}
     >
       <div className="app-container">
         <nav className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <span className="text-2xl font-bold bg-gradient-to-r from-apple-blue to-purple-600 bg-clip-text text-transparent">
-              BihariTool
+              <AnimatedText text="BihariTool" delay={300} letterDelay={80} />
             </span>
           </Link>
 
@@ -117,14 +118,14 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu with improved background */}
         {menuOpen && (
-          <div className="md:hidden mt-3 pb-3 border-t border-gray-200 bg-white/95 animate-fade-in">
+          <div className="md:hidden mt-3 pb-3 border-t border-gray-200 bg-white/95 backdrop-blur-lg animate-fade-in rounded-b-lg shadow-md">
             <ul className="space-y-4 mt-4">
               {navLinks.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
                     className={cn(
-                      'block text-base py-2 transition-colors duration-200',
+                      'block text-base py-2 transition-colors duration-200 px-4',
                       location.pathname === link.path
                         ? 'text-apple-blue font-medium'
                         : 'text-apple-black hover:text-apple-blue'
@@ -139,7 +140,7 @@ const Header: React.FC = () => {
                   variant="ghost"
                   size="sm"
                   onClick={toggleLanguage}
-                  className="w-full justify-start"
+                  className="w-full justify-start px-4"
                 >
                   <Globe className="h-4 w-4 mr-2" />
                   {language === 'en' ? 'हिंदी' : 'English'}

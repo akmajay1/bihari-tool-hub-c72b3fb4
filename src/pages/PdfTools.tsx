@@ -10,7 +10,8 @@ import {
   FileType,
   FileSpreadsheet,
   Presentation,
-  Stamp
+  Stamp,
+  ImageDown
 } from "lucide-react";
 import ToolCard from "../components/UI/ToolCard";
 
@@ -42,7 +43,7 @@ const PdfTools = () => {
           />
           <ToolCard
             title="PDF to Image"
-            icon={<FileText size={24} />}
+            icon={<ImageDown size={24} />}
             description="Extract images from your PDF documents"
             to="/pdf-tools/pdf-to-image"
           />

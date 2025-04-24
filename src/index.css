@@ -107,3 +107,66 @@
     opacity: 1;
   }
 }
+
+/* Adding bubble animations */
+@keyframes float {
+  0% {
+    bottom: -100px;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    bottom: 100vh;
+    opacity: 0;
+  }
+}
+
+@keyframes zigzag {
+  0% {
+    transform: translateX(-20%);
+  }
+  50% {
+    transform: translateX(20%);
+  }
+  100% {
+    transform: translateX(-20%);
+  }
+}
+
+.animate-float {
+  animation: float 15s linear infinite;
+}
+
+/* Apple-like UI enhancements */
+.glass-effect {
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.apple-shadow {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 0.15em solid currentColor;
+  white-space: nowrap;
+  animation: typing 2s steps(40) forwards, blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: currentColor; }
+}

@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import PageTransition from "./components/Layout/PageTransition";
+import BubbleAnimation from "./components/UI/BubbleAnimation";
 
 import ImageCompress from "./pages/tools/ImageCompress";
 import ImageResize from "./pages/tools/ImageResize";
@@ -30,6 +31,7 @@ import PhotoSignJoiner from "./pages/tools/PhotoSignJoiner";
 import PdfMerge from "./pages/tools/PdfMerge";
 import PdfSplit from "./pages/tools/PdfSplit";
 import PdfCompress from "./pages/tools/PdfCompress";
+import PdfToImage from "./pages/tools/PdfToImage";
 import WordToPdf from "./pages/tools/WordToPdf";
 import ExcelToPdf from "./pages/tools/ExcelToPdf";
 import PowerPointToPdf from "./pages/tools/PowerPointToPdf";
@@ -64,7 +66,7 @@ const App = () => {
               <Helmet>
                 <meta name="description" content="BihariTool - Free online tools for image editing and PDF manipulation" />
                 <meta name="keywords" content="image tools, pdf tools, compress image, remove background, merge pdf, image to pdf" />
-                <meta name="author" content="BihariTool" />
+                <meta name="author" content="Akhilesh Kumar Singh, Akma" />
                 <meta property="og:title" content="BihariTool - Free Online Image and PDF Tools" />
                 <meta property="og:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
                 <meta property="og:type" content="website" />
@@ -72,6 +74,7 @@ const App = () => {
                 <meta name="twitter:title" content="BihariTool - Free Online Image and PDF Tools" />
                 <meta name="twitter:description" content="Professional-grade tools to edit, convert, and enhance your files. No signup required." />
               </Helmet>
+              <BubbleAnimation />
               <Header />
               <PageTransition>
                 <Routes>
@@ -79,6 +82,7 @@ const App = () => {
                   <Route path="/image-tools" element={<ImageTools />} />
                   <Route path="/pdf-tools" element={<PdfTools />} />
                   
+                  {/* Image Tools Routes */}
                   <Route path="/image-tools/compress" element={<ImageCompress />} />
                   <Route path="/image-tools/resize" element={<ImageResize />} />
                   <Route path="/image-tools/change-background" element={<ImageChangeBackground />} />
@@ -91,9 +95,12 @@ const App = () => {
                   <Route path="/image-tools/enhance" element={<ImageEnhance />} />
                   <Route path="/image-tools/photo-sign-joiner" element={<PhotoSignJoiner />} />
                   
+                  {/* PDF Tools Routes */}
                   <Route path="/pdf-tools/merge-pdf" element={<PdfMerge />} />
                   <Route path="/pdf-tools/split-pdf" element={<PdfSplit />} />
                   <Route path="/pdf-tools/compress-pdf" element={<PdfCompress />} />
+                  <Route path="/pdf-tools/pdf-to-image" element={<PdfToImage />} />
+                  <Route path="/pdf-tools/image-to-pdf" element={<ImageToPdf />} /> {/* Reusing ImageToPdf component */}
                   <Route path="/pdf-tools/word-to-pdf" element={<WordToPdf />} />
                   <Route path="/pdf-tools/excel-to-pdf" element={<ExcelToPdf />} />
                   <Route path="/pdf-tools/powerpoint-to-pdf" element={<PowerPointToPdf />} />
