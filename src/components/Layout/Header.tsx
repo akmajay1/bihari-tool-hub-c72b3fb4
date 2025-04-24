@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +29,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     setMenuOpen(false);
+    window.scrollTo(0, 0); // Scroll to top on route change
   }, [location.pathname]);
 
   const navLinks = [
@@ -40,7 +42,7 @@ const Header: React.FC = () => {
     <header
       className={cn(
         'fixed w-full z-50 transition-all duration-300 backdrop-blur-sm',
-        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-transparent py-5'
+        scrolled ? 'bg-white/80 shadow-sm py-3' : 'bg-white/60 py-5' // Improved background for mobile
       )}
     >
       <div className="app-container">
@@ -113,9 +115,9 @@ const Header: React.FC = () => {
           </button>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu with improved background */}
         {menuOpen && (
-          <div className="md:hidden mt-3 pb-3 border-t border-gray-200 animate-fade-in">
+          <div className="md:hidden mt-3 pb-3 border-t border-gray-200 bg-white/95 animate-fade-in">
             <ul className="space-y-4 mt-4">
               {navLinks.map((link) => (
                 <li key={link.path}>

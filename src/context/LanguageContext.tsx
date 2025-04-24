@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define translation object types
 type TranslationsType = {
@@ -92,6 +92,59 @@ const translations: TranslationsType = {
     en: "View all PDF tools →",
     hi: "सभी पीडीएफ टूल्स देखें →",
   },
+  // Tool layout translations
+  uploadImage: {
+    en: "Upload Image",
+    hi: "इमेज अपलोड करें",
+  },
+  configureSettings: {
+    en: "Configure Settings",
+    hi: "सेटिंग्स कॉन्फ़िगर करें",
+  },
+  original: {
+    en: "Original",
+    hi: "मूल",
+  },
+  result: {
+    en: "Result",
+    hi: "परिणाम",
+  },
+  download: {
+    en: "Download",
+    hi: "डाउनलोड",
+  },
+  processing: {
+    en: "Processing...",
+    hi: "प्रोसेसिंग...",
+  },
+  colorTolerance: {
+    en: "Color Tolerance",
+    hi: "रंग सहनशीलता",
+  },
+  removeBackground: {
+    en: "Remove Background",
+    hi: "बैकग्राउंड हटाएं",
+  },
+  higherValues: {
+    en: "Higher values will remove more colors that are similar to the background",
+    hi: "अधिक मान बैकग्राउंड के समान रंगों को अधिक हटा देंगे",
+  },
+  previewDownload: {
+    en: "Preview & Download",
+    hi: "प्रीव्यू और डाउनलोड",
+  },
+  size: {
+    en: "Size",
+    hi: "आकार",
+  },
+  dimensions: {
+    en: "Dimensions",
+    hi: "आयाम",
+  },
+  pixels: {
+    en: "pixels",
+    hi: "पिक्सेल",
+  }
 };
 
 type LanguageContextType = {
@@ -104,6 +157,21 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
+
+  // Scroll to top on page navigation
+  useEffect(() => {
+    const handleNavigate = () => {
+      window.scrollTo(0, 0);
+    };
+
+    // Listen for navigation events
+    window.addEventListener('popstate', handleNavigate);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('popstate', handleNavigate);
+    };
+  }, []);
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'en' ? 'hi' : 'en');

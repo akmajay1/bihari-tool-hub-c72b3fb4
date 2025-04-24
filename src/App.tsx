@@ -1,9 +1,10 @@
-import React from "react";
+
+import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import Index from "./pages/Index";
@@ -39,6 +40,17 @@ import { LanguageProvider } from "./context/LanguageContext";
 const queryClient = new QueryClient();
 const helmetContext = {}; // Create a context for the HelmetProvider
 
+// ScrollToTop component to ensure pages start at the top
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
+
 const App = () => {
   return (
     <HelmetProvider context={helmetContext}>
@@ -48,6 +60,7 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop />
               <Helmet>
                 <meta name="description" content="BihariTool - Free online tools for image editing and PDF manipulation" />
                 <meta name="keywords" content="image tools, pdf tools, compress image, remove background, merge pdf, image to pdf" />

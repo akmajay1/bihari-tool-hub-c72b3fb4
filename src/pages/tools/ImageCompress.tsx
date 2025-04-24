@@ -8,9 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { compressImage, formatFileSize, getImageDimensions } from '@/utils/imageUtils';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLanguage } from '@/context/LanguageContext';
 
 const ImageCompress = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
   const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
@@ -19,6 +22,7 @@ const ImageCompress = () => {
   const [compressedSize, setCompressedSize] = useState<number>(0);
   const [dimensions, setDimensions] = useState<{ width: number, height: number } | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("result"); // Default to result
 
   // Clean up URLs on unmount
   useEffect(() => {
@@ -35,6 +39,7 @@ const ImageCompress = () => {
     setCompressedBlob(null);
     setCompressedUrl(null);
     setCompressedSize(0);
+    setActiveTab("original");
     
     try {
       const dims = await getImageDimensions(file);
@@ -67,6 +72,7 @@ const ImageCompress = () => {
       setCompressedBlob(blob);
       setCompressedUrl(url);
       setCompressedSize(blob.size);
+      setActiveTab("result"); // Auto switch to result tab
       
       toast({
         title: "Compression complete",
@@ -119,6 +125,14 @@ const ImageCompress = () => {
     setCompressedSize(0);
     setDimensions(null);
   }, [compressedUrl]);
+
+  // Format file size with KB option for small files
+  const formatSizeWithKB = (bytes: number): string => {
+    if (bytes < 1024 * 1024) {
+      return `${Math.round(bytes / 1024)} KB`;
+    }
+    return formatFileSize(bytes);
+  };
 
   return (
     <ToolLayout
@@ -178,33 +192,88 @@ const ImageCompress = () => {
             </Card>
           )}
 
-          {compressedBlob && compressedUrl && (
+          {/* Preview Section with Tabs */}
+          {selectedFile && (
             <div className="mt-8">
               <h2 className="text-xl font-medium mb-4">Preview</h2>
               <Card className="overflow-hidden">
-                <div className="aspect-auto max-h-[500px] overflow-hidden bg-gray-50 border-b flex items-center justify-center">
-                  <img 
-                    src={compressedUrl} 
-                    alt="Compressed preview" 
-                    className="max-w-full max-h-[500px] object-contain"
-                  />
-                </div>
-                <CardContent className="py-4 flex justify-between items-center">
-                  <div>
-                    <p className="text-sm text-apple-darkgray">
-                      {formatFileSize(compressedSize)} • {Math.round((1 - (compressedSize / originalSize)) * 100)}% smaller
-                    </p>
-                    {dimensions && (
-                      <p className="text-sm text-apple-darkgray">
-                        {dimensions.width} × {dimensions.height} px
-                      </p>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="w-full mb-0 rounded-none">
+                    <TabsTrigger value="original" className="flex-1">Original</TabsTrigger>
+                    <TabsTrigger value="result" disabled={!compressedUrl} className="flex-1">Result</TabsTrigger>
+                    <TabsTrigger value="comparison" disabled={!compressedUrl} className="flex-1">Before/After</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="original" className="m-0">
+                    {selectedFile && (
+                      <div className="aspect-auto max-h-[500px] overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                        <img 
+                          src={URL.createObjectURL(selectedFile)} 
+                          alt="Original" 
+                          className="max-w-full max-h-[500px] object-contain"
+                        />
+                      </div>
                     )}
-                  </div>
-                  <Button onClick={handleDownload} className="apple-btn">
-                    <Download size={18} className="mr-2" />
-                    Download
-                  </Button>
-                </CardContent>
+                  </TabsContent>
+                  
+                  <TabsContent value="result" className="m-0">
+                    {compressedUrl && (
+                      <div className="aspect-auto max-h-[500px] overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                        <img 
+                          src={compressedUrl} 
+                          alt="Compressed" 
+                          className="max-w-full max-h-[500px] object-contain"
+                        />
+                      </div>
+                    )}
+                  </TabsContent>
+                  
+                  <TabsContent value="comparison" className="m-0">
+                    {selectedFile && compressedUrl && (
+                      <div className="flex flex-col md:flex-row">
+                        <div className="flex-1 border-r border-gray-200">
+                          <div className="text-center font-medium p-2 bg-gray-50">Original</div>
+                          <div className="aspect-auto max-h-[400px] overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                            <img 
+                              src={URL.createObjectURL(selectedFile)} 
+                              alt="Original" 
+                              className="max-w-full max-h-[400px] object-contain"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-center font-medium p-2 bg-gray-50">Compressed</div>
+                          <div className="aspect-auto max-h-[400px] overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                            <img 
+                              src={compressedUrl} 
+                              alt="Compressed" 
+                              className="max-w-full max-h-[400px] object-contain"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
+                
+                {compressedUrl && (
+                  <CardContent className="py-4 flex justify-between items-center border-t">
+                    <div>
+                      <p className="text-sm text-apple-darkgray">
+                        {formatSizeWithKB(compressedSize)} • {Math.round((1 - (compressedSize / originalSize)) * 100)}% smaller
+                      </p>
+                      {dimensions && (
+                        <p className="text-sm text-apple-darkgray">
+                          {dimensions.width} × {dimensions.height} px
+                        </p>
+                      )}
+                    </div>
+                    <Button onClick={handleDownload} className="apple-btn">
+                      <Download size={18} className="mr-2" />
+                      Download
+                    </Button>
+                  </CardContent>
+                )}
               </Card>
             </div>
           )}
@@ -222,7 +291,7 @@ const ImageCompress = () => {
                   </div>
                   <div>
                     <p className="text-sm text-apple-darkgray">Original size</p>
-                    <p className="font-medium text-sm">{formatFileSize(originalSize)}</p>
+                    <p className="font-medium text-sm">{formatSizeWithKB(originalSize)}</p>
                   </div>
                   {dimensions && (
                     <div>
@@ -238,11 +307,11 @@ const ImageCompress = () => {
                     <>
                       <div>
                         <p className="text-sm text-apple-darkgray">Compressed size</p>
-                        <p className="font-medium text-sm">{formatFileSize(compressedSize)}</p>
+                        <p className="font-medium text-sm">{formatSizeWithKB(compressedSize)}</p>
                       </div>
                       <div>
                         <p className="text-sm text-apple-darkgray">Saved</p>
-                        <p className="font-medium text-sm">{formatFileSize(originalSize - compressedSize)} ({Math.round((1 - (compressedSize / originalSize)) * 100)}%)</p>
+                        <p className="font-medium text-sm">{formatSizeWithKB(originalSize - compressedSize)} ({Math.round((1 - (compressedSize / originalSize)) * 100)}%)</p>
                       </div>
                     </>
                   )}

@@ -9,14 +9,17 @@ import { formatFileSize } from '@/utils/imageUtils';
 import { toast } from 'sonner';
 import { Download } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { useLanguage } from '@/context/LanguageContext';
 
 const ImageRemoveBackground = () => {
+  const { t } = useLanguage();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [tolerance, setTolerance] = useState(30);
   const [imageInfo, setImageInfo] = useState<{ size: string; width: number; height: number } | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("result"); // Default to result tab
 
   // Reset state when file changes
   useEffect(() => {
@@ -26,6 +29,7 @@ const ImageRemoveBackground = () => {
         if (e.target?.result) {
           setPreviewUrl(e.target.result as string);
           setOutputUrl(null);
+          setActiveTab("original"); // Show original when uploading new file
         }
       };
       reader.readAsDataURL(selectedFile);
@@ -129,6 +133,7 @@ const ImageRemoveBackground = () => {
         const outputUrl = canvas.toDataURL('image/png');
         setOutputUrl(outputUrl);
         setLoading(false);
+        setActiveTab("result"); // Automatically show result tab
         toast.success('Background removed successfully!');
       };
       
@@ -176,7 +181,7 @@ const ImageRemoveBackground = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Upload Section */}
         <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">1. Upload Image</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('uploadImage')}</h2>
           <FileUploader
             onFileSelect={handleFileSelect}
             acceptedFileTypes="image/*"
@@ -186,18 +191,18 @@ const ImageRemoveBackground = () => {
           />
           {imageInfo && (
             <div className="mt-4 text-sm text-apple-darkgray">
-              <p>Size: {imageInfo.size}</p>
-              <p>Dimensions: {imageInfo.width} × {imageInfo.height} pixels</p>
+              <p>{t('size')}: {imageInfo.size}</p>
+              <p>{t('dimensions')}: {imageInfo.width} × {imageInfo.height} {t('pixels')}</p>
             </div>
           )}
         </Card>
 
         {/* Settings Section */}
         <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">2. Configure Settings</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('configureSettings')}</h2>
           
           <div className="mb-6">
-            <h3 className="font-medium mb-2">Color Tolerance: {tolerance}</h3>
+            <h3 className="font-medium mb-2">{t('colorTolerance')}: {tolerance}</h3>
             <Slider 
               value={[tolerance]} 
               min={5} 
@@ -206,7 +211,7 @@ const ImageRemoveBackground = () => {
               onValueChange={(values) => setTolerance(values[0])} 
             />
             <p className="text-sm text-apple-darkgray mt-2">
-              Higher values will remove more colors that are similar to the background
+              {t('higherValues')}
             </p>
           </div>
           
@@ -215,7 +220,7 @@ const ImageRemoveBackground = () => {
             disabled={!selectedFile || loading}
             className="w-full"
           >
-            {loading ? 'Processing...' : 'Remove Background'}
+            {loading ? t('processing') : t('removeBackground')}
           </Button>
         </Card>
       </div>
@@ -223,12 +228,15 @@ const ImageRemoveBackground = () => {
       {/* Preview Section */}
       {(previewUrl || outputUrl) && (
         <Card className="mt-8 p-6">
-          <h2 className="text-xl font-semibold mb-4">3. Preview & Download</h2>
-          <Tabs defaultValue="original" className="w-full">
+          <h2 className="text-xl font-semibold mb-4">{t('previewDownload')}</h2>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-4">
-              <TabsTrigger value="original">Original</TabsTrigger>
+              <TabsTrigger value="original">{t('original')}</TabsTrigger>
               <TabsTrigger value="result" disabled={!outputUrl}>
-                Result
+                {t('result')}
+              </TabsTrigger>
+              <TabsTrigger value="comparison" disabled={!outputUrl}>
+                Before/After
               </TabsTrigger>
             </TabsList>
             <TabsContent value="original">
@@ -255,9 +263,43 @@ const ImageRemoveBackground = () => {
                   <div className="flex gap-4">
                     <Button onClick={handleDownload} className="flex items-center gap-2">
                       <Download size={18} />
-                      Download
+                      {t('download')}
                     </Button>
                   </div>
+                </div>
+              )}
+            </TabsContent>
+            <TabsContent value="comparison">
+              {outputUrl && previewUrl && (
+                <div className="flex flex-col md:flex-row gap-4 border rounded-lg overflow-hidden">
+                  <div className="flex-1 bg-gray-50 p-4 border-r border-gray-200">
+                    <div className="text-center font-medium mb-2">{t('original')}</div>
+                    <div className="flex justify-center">
+                      <img 
+                        src={previewUrl} 
+                        alt="Original" 
+                        className="max-h-80 object-contain"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 bg-checkerboard p-4">
+                    <div className="text-center font-medium mb-2">{t('result')}</div>
+                    <div className="flex justify-center">
+                      <img 
+                        src={outputUrl} 
+                        alt="Result" 
+                        className="max-h-80 object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {outputUrl && (
+                <div className="mt-4 flex justify-center">
+                  <Button onClick={handleDownload} className="flex items-center gap-2">
+                    <Download size={18} />
+                    {t('download')}
+                  </Button>
                 </div>
               )}
             </TabsContent>
